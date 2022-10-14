@@ -17,8 +17,19 @@ def cadastrar_ingrediente(ingredientes: dict[str, dict[str, float]],
     :type novo_preco: float
     :return: dicionario atualizado
     :rtype: dict[str,dict[str,float]]
+    >>> cadastrar_ingrediente(ingredientes, "massa", "tradicional", 5.50)
+    {'massa': {'tradicional': 5.5}, 'molho': {}, 'queijo': {}, 'cobertura': {}}
+    {'massa': {'tradicional': 5.5}, 'molho': {}, 'queijo': {}, 'cobertura': {}}
+    >>> cadastrar_ingrediente(ingredientes, "molho", "tomate", 7.50)
+    {'massa': {'tradicional': 5.5}, 'molho': {'tomate': 7.5}, 'queijo': {}, 'cobertura': {}}
+    {'massa': {'tradicional': 5.5}, 'molho': {'tomate': 7.5}, 'queijo': {}, 'cobertura': {}}
+    >>> cadastrar_ingrediente(ingredientes, "molho", "tomate", 8.50)
+    {'massa': {'tradicional': 5.5}, 'molho': {'tomate': 8.5}, 'queijo': {}, 'cobertura': {}}
+    {'massa': {'tradicional': 5.5}, 'molho': {'tomate': 8.5}, 'queijo': {}, 'cobertura': {}}
     """
-    pass
+    ingredientes[tipo_ingrediente][novo_ingrediente] = novo_preco
+    print(ingredientes)
+    return ingredientes
 
 
 def remover_ingrediente(ingredientes: dict[str, dict[str, float]],
@@ -33,8 +44,20 @@ def remover_ingrediente(ingredientes: dict[str, dict[str, float]],
     :type nome_ingrediente: str
     :return: dicionario atualizado
     :rtype: dict[str,dict[str,float]]
+    >>> ingredientes = {'massa': {'tradicional': 5.5}, 'molho': {'tomate': 8.5}, 'queijo': {}, 'cobertura': {}}
+    >>> remover_ingrediente(ingredientes, "massa", "tradicional")
+    {'massa': {}, 'molho': {'tomate': 8.5}, 'queijo': {}, 'cobertura': {}}
+    {'massa': {}, 'molho': {'tomate': 8.5}, 'queijo': {}, 'cobertura': {}}
+    >>> ingredientes = {'massa': {'tradicional': 5.5}, 'molho': {'tomate': 8.5}, 'queijo': {}, 'cobertura': {}}
+    >>> remover_ingrediente(ingredientes, "massa", "grossa")
+    {'massa': {'tradicional': 5.5}, 'molho': {'tomate': 8.5}, 'queijo': {}, 'cobertura': {}}
     """
-    pass
+    try:
+        del ingredientes[tipo_ingrediente][nome_ingrediente]
+        print(ingredientes)
+    except:
+        pass
+    return ingredientes
 
 
 def listar_ingredientes(ingredientes: dict[str, dict[str, float]], tipos_ingrediente: list[str]):
@@ -46,8 +69,26 @@ def listar_ingredientes(ingredientes: dict[str, dict[str, float]], tipos_ingredi
     :type tipos_ingrediente: list[str]
     :return: dicionario filtrado
     :rtype: dict[str,dict[str,float]]
+    >>> ingredientes = {'massa': {'tradicional': 5.5}, 'molho': {'tomate': 8.5}, 'queijo': {}, 'cobertura': {}}
+    >>> listar_ingredientes(ingredientes, ["massa"])
+    massa
+    ...
+    {'massa': {'tradicional': 5.5}}
     """
-    pass
+    dicionario_filtrado = {}
+    for tipo in tipos_ingrediente:
+        print(tipo)
+        print(ingredientes[tipo], "\n")
+        dicionario_filtrado[tipo] = ingredientes[tipo]
+    return dicionario_filtrado
+
+
+"""
+cadastrar_ingrediente(ingredientes, "massa", "tradicional", 5.50)
+cadastrar_ingrediente(ingredientes, "queijo", "tradicional", 6.50)
+cadastrar_ingrediente(ingredientes, "cobertura", "tradicional", 7.50)
+print(listar_ingredientes(ingredientes, ["massa", "queijo"]))
+"""
 
 
 def montar_pizza(ingredientes: dict[str, dict[str, float]], ingredientes_pizza: dict[str, dict[str, float]]):
@@ -59,5 +100,37 @@ def montar_pizza(ingredientes: dict[str, dict[str, float]], ingredientes_pizza: 
     :type ingredientes_pizza: dict[str,dict[str,float]]
     :return: Mensagem que lista os ingredientes escolhidos e o preco
     :rtype: str
+    >>> ingredientes = {'massa': {'tradicional': 5.5, 'grossa': 7.5}, 'molho': {'tomate': 8.5}, 'queijo': {'mussarela': 7.0}, 'cobertura': {'calabresa': 8.5}}
+    >>> ingredientes_pizza = {'massa': {'tradicional': 5.5}, 'molho': {'tomate': 8.5}, 'queijo': {'mussarela': 7.0}, 'cobertura': {'calabresa': 8.5}}
+    >>> montar_pizza(ingredientes, ingredientes_pizza)
+    'A pizza tem contem os ingredientes:\nmassa tradicional\nmolho tomate\nqueijo mussarela\ncobertura calabresa\n\n Seu preco e: \n29.5'
     """
-    pass
+    preco_total = float()
+    lista_ingredientes = str()
+    for tipo in ingredientes_pizza:
+        for ingrediente in ingredientes_pizza[tipo]:
+            if ingrediente in ingredientes[tipo]:
+                lista_ingredientes += tipo + " "
+                lista_ingredientes += ingrediente + "\n"
+                preco_total += ingredientes_pizza[tipo][ingrediente]
+            else:
+                print(f"O ingrediente {ingrediente} nao foi encontrado")
+    preco_total = str(preco_total)
+    mensagem = "A pizza tem contem os ingredientes:\n" + \
+        lista_ingredientes + "\n Seu preco e: \n" + preco_total
+    return mensagem
+
+
+"""
+cadastrar_ingrediente(ingredientes, "massa", "tradicional", 5.50)
+cadastrar_ingrediente(ingredientes, "queijo", "tradicional", 6.50)
+cadastrar_ingrediente(ingredientes, "cobertura", "tradicional", 7.50)
+
+mensagem = montar_pizza(
+    ingredientes, {"massa": {"tradicional": 5.50}, "queijo": {"tradicional": 6.50}})
+print(mensagem)
+"""
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
