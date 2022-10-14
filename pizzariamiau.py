@@ -55,7 +55,7 @@ def montar_pizza(ingredientes: dict[str, dict[str, float]], ingredientes_pizza: 
 
     :param ingredientes: dicionário com os ingredientes ja inseridos
     :type ingredientes: dict[str,dict[str,float]
-    :param ingredientes_pizza: dicionario filtrado com os ingredeintes escolhidos
+    :param ingredientes_pizza: dicionario filtrado com os ingredientes escolhidos. So pode ser escolhido uma massa
     :type ingredientes_pizza: dict[str,dict[str,float]]
     :return: Mensagem que lista os ingredientes escolhidos e o preco
     :rtype: str
